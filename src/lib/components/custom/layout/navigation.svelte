@@ -21,8 +21,9 @@
       <DropdownMenu.Group>
         <DropdownMenu.Label>Configuration</DropdownMenu.Label>
         <DropdownMenu.Separator />
+        <DropdownMenu.Item href="/">Dashboard</DropdownMenu.Item>
         <DropdownMenu.Item href="/config">Global Settings</DropdownMenu.Item>
-        <DropdownMenu.Item>Seasons</DropdownMenu.Item>
+        <DropdownMenu.Item href="/seasons">Seasons</DropdownMenu.Item>
       </DropdownMenu.Group>
     </DropdownMenu.Content>
   </DropdownMenu.Root>

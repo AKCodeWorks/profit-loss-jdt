@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2.0.0",
-  "productName": "Joey Does Tech",
+  "productName": "Profit or Loss - JDT",
 
   "version": "0.1.0",
   "identifier": "com.akcodeworks.jdt",
@@ -13,7 +13,7 @@
   "app": {
     "windows": [
       {
-        "title": "Joey Does Tech",
+        "title": "Joey Does Tech | Profit or Loss",
         "width": 800,
         "height": 600
       }

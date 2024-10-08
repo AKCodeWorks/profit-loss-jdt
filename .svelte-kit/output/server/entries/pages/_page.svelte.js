@@ -1,6 +1,6 @@
-import { c as create_ssr_component, f as compute_rest_props, i as spread, j as escape_attribute_value, k as escape_object, l as add_attribute, v as validate_component } from "../../chunks/ssr.js";
+import { c as create_ssr_component, a as compute_rest_props, d as spread, e as escape_attribute_value, f as escape_object, h as add_attribute, v as validate_component } from "../../chunks/ssr.js";
 import "dequal";
-import { r as is_void, t as cn } from "../../chunks/utils.js";
+import { q as is_void, r as cn } from "../../chunks/utils.js";
 import { tv } from "tailwind-variants";
 import "clsx";
 import "@tauri-apps/plugin-fs";
@@ -110,7 +110,7 @@ const Button = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `${$$result.head += `<!-- HEAD_svelte-1y8udkv_START -->${$$result.title = `<title>Joey Does Tech</title>`, ""}<!-- HEAD_svelte-1y8udkv_END -->`, ""} ${validate_component(Button, "Button").$$render($$result, {}, {}, {
     default: () => {
-      return `Write Config to Disk`;
+      return `Console Log Config`;
     }
   })}`;
 });

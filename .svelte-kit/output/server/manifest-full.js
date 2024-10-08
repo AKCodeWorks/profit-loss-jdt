@@ -10,11 +10,12 @@ return {
 	assets: new Set(["favicon.png","svelte.svg","tauri.svg","vite.svg"]),
 	mimeTypes: {".png":"image/png",".svg":"image/svg+xml"},
 	_: {
-		client: {"start":"_app/immutable/entry/start.DtHr_lE1.js","app":"_app/immutable/entry/app.CskaGDwq.js","imports":["_app/immutable/entry/start.DtHr_lE1.js","_app/immutable/chunks/entry.HE_Nldla.js","_app/immutable/chunks/scheduler.DirwnR-Z.js","_app/immutable/chunks/index.BHpgQ8v2.js","_app/immutable/chunks/environment.CZLhA_4V.js","_app/immutable/entry/app.CskaGDwq.js","_app/immutable/chunks/scheduler.DirwnR-Z.js","_app/immutable/chunks/index.VmO1ZtvU.js","_app/immutable/chunks/environment.CZLhA_4V.js"],"stylesheets":[],"fonts":[],"uses_env_dynamic_public":false},
+		client: null,
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
 			__memo(() => import('./nodes/1.js')),
-			__memo(() => import('./nodes/2.js'))
+			__memo(() => import('./nodes/2.js')),
+			__memo(() => import('./nodes/3.js'))
 		],
 		routes: [
 			{
@@ -22,6 +23,13 @@ return {
 				pattern: /^\/$/,
 				params: [],
 				page: { layouts: [0,], errors: [1,], leaf: 2 },
+				endpoint: null
+			},
+			{
+				id: "/config",
+				pattern: /^\/config\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 3 },
 				endpoint: null
 			}
 		],

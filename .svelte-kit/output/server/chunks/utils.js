@@ -1,6 +1,6 @@
-import "dequal";
+import { dequal } from "dequal";
 import { d as derived, w as writable, r as readable } from "./index.js";
-import { o as onDestroy, g as get_store_value } from "./ssr.js";
+import { o as onDestroy, k as get_store_value } from "./ssr.js";
 import { o as onMount } from "./ssr2.js";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -44,6 +44,12 @@ function lightable(value) {
     };
   }
   return { subscribe };
+}
+function getElementByMeltId(id) {
+  if (!isBrowser)
+    return null;
+  const el = document.querySelector(`[data-melt-id="${id}"]`);
+  return isHTMLElement(el) ? el : null;
 }
 const hiddenAction = (obj) => {
   return new Proxy(obj, {
@@ -127,6 +133,15 @@ function isElement(element) {
 }
 function isHTMLElement(element) {
   return element instanceof HTMLElement;
+}
+function isHTMLInputElement(element) {
+  return element instanceof HTMLInputElement;
+}
+function isHTMLLabelElement(element) {
+  return element instanceof HTMLLabelElement;
+}
+function isHTMLButtonElement(element) {
+  return element instanceof HTMLButtonElement;
 }
 function isElementDisabled(element) {
   const ariaDisabled = element.getAttribute("aria-disabled");
@@ -212,6 +227,19 @@ function omit(obj, ...keys) {
   for (const key of Object.keys(obj)) {
     if (!keys.includes(key)) {
       result[key] = obj[key];
+    }
+  }
+  return result;
+}
+function stripValues(inputObject, toStrip, recursive) {
+  return Object.fromEntries(Object.entries(inputObject).filter(([_, value]) => !dequal(value, toStrip)));
+}
+function removeUndefined(obj) {
+  const result = {};
+  for (const key in obj) {
+    const value = obj[key];
+    if (value !== void 0) {
+      result[key] = value;
     }
   }
   return result;
@@ -396,12 +424,65 @@ const useEscapeKeydown = (node, config = {}) => {
     }
   };
 };
-({
+function toReadableStores(properties) {
+  const result = {};
+  Object.keys(properties).forEach((key) => {
+    const propertyKey = key;
+    const value = properties[propertyKey];
+    if (isReadable(value)) {
+      result[propertyKey] = withGet(value);
+    } else {
+      result[propertyKey] = withGet(readable(value));
+    }
+  });
+  return result;
+}
+const defaults$1 = {
   prefix: "",
   disabled: readable(false),
   required: readable(false),
   name: readable(void 0)
-});
+};
+function createHiddenInput(props) {
+  const withDefaults = {
+    ...defaults$1,
+    ...removeUndefined(props)
+  };
+  const { name: elName } = createElHelpers(withDefaults.prefix);
+  const { value, name, disabled, required } = toReadableStores(omit(withDefaults, "prefix"));
+  const nameStore = name;
+  const hiddenInput = makeElement(elName("hidden-input"), {
+    stores: [value, nameStore, disabled, required],
+    returned: ([$value, $name, $disabled, $required]) => {
+      return {
+        name: $name,
+        value: $value?.toString(),
+        "aria-hidden": "true",
+        hidden: true,
+        disabled: $disabled,
+        required: $required,
+        tabIndex: -1,
+        style: styleToString({
+          position: "absolute",
+          opacity: 0,
+          "pointer-events": "none",
+          margin: 0,
+          transform: "translateX(-100%)"
+        })
+      };
+    },
+    action: (node) => {
+      const unsub = value.subscribe((newValue) => {
+        node.value = newValue;
+        node.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      return {
+        destroy: unsub
+      };
+    }
+  });
+  return hiddenInput;
+}
 const defaults = {
   isDateDisabled: void 0,
   isDateUnavailable: void 0,
@@ -479,29 +560,37 @@ const flyAndScale = (node, params = { y: -8, x: 0, start: 0.95, duration: 150 })
   };
 };
 export {
+  stripValues as A,
+  isHTMLButtonElement as B,
+  createHiddenInput as C,
+  isHTMLInputElement as D,
+  cubicOut as E,
   FIRST_LAST_KEYS as F,
   SELECTION_KEYS as S,
   isHTMLElement as a,
-  isFunction as b,
-  isElement as c,
-  addEventListener as d,
-  executeCallbacks as e,
-  effect as f,
-  addMeltEventListener as g,
-  safeOnMount as h,
-  isBrowser as i,
-  isElementDisabled as j,
-  createElHelpers as k,
-  kbd as l,
+  executeCallbacks as b,
+  addMeltEventListener as c,
+  isElementDisabled as d,
+  effect as e,
+  safeOnMount as f,
+  createElHelpers as g,
+  disabledAttr as h,
+  isFunction as i,
+  isBrowser as j,
+  kbd as k,
+  addEventListener as l,
   makeElement as m,
   noop as n,
-  disabledAttr as o,
+  omit as o,
   portalAttr as p,
-  omit as q,
-  is_void as r,
+  is_void as q,
+  cn as r,
   styleToString as s,
-  cn as t,
+  flyAndScale as t,
   useEscapeKeydown as u,
-  flyAndScale as v,
-  withGet as w
+  getElementByMeltId as v,
+  withGet as w,
+  isElement as x,
+  isHTMLLabelElement as y,
+  isObject as z
 };

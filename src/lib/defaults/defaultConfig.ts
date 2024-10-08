@@ -1,4 +1,4 @@
-import type { Config } from "../../interfaces/Config";
+import type { Config } from "../interfaces/Config";
 
 export const defaultConfig: Config = {
   currency: "USD",

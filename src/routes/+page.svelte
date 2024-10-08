@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { appDataDir } from "@tauri-apps/api/path";
-
   import Button from "$lib/components/ui/button/button.svelte";
   import {
     exists,
@@ -13,7 +11,6 @@
   import { onMount } from "svelte";
 
   async function writeConfig() {
-    const appDataDirectory = await appDataDir();
     await writeTextFile("config.json", JSON.stringify(myConfig), {
       baseDir: BaseDirectory.AppLocalData,
     });
@@ -21,7 +18,6 @@
     const file = await readTextFile("config.json", {
       baseDir: BaseDirectory.AppLocalData,
     });
-
     console.log(JSON.parse(file));
   }
 

@@ -14,10 +14,6 @@
   let selectedSeason: string = "";
   let selectedEpisode: string = "";
 
-  $: if (storage.seasons) {
-    seasons = storage.seasons.data;
-  }
-
   onMount(async () => {
     if (!storage?.ready) {
       await storage?.init();
@@ -41,7 +37,6 @@
   }
 
   async function saveSeasons() {
-    console.log("saving seasons");
     try {
       await storage?.saveAllSeasons({ data: seasons });
       toast.success("Saved Changes");
@@ -62,7 +57,7 @@
   }
 </script>
 
-<div class="flex items-center gap-4">
+<div class="flex items-center gap-4 mb-2">
   {#if seasons.length > 0}
     <LabeledSelect
       class="max-w-48"
@@ -123,7 +118,7 @@
                 />
                 <TableInput
                   on:change={async () => await saveSeasons()}
-                  class="ml-2 h-fit py-1 w-fit"
+                  class="ml-2 h-fit py-1 max-w-36"
                   placeholder="Episode Name"
                   type="text"
                   noCurrency
@@ -142,7 +137,7 @@
                       />
                       <TableInput
                         on:change={async () => await saveSeasons()}
-                        class="w-48 font-bold"
+                        class="max-w-48 font-bold"
                         placeholder="Item Name"
                         type="text"
                         noCurrency
@@ -153,6 +148,7 @@
                   </Table.Cell>
                   <Table.Cell>
                     <TableInput
+                      class="max-w-24"
                       on:change={async () => await saveSeasons()}
                       step={0.01}
                       placeholder="Cost"
@@ -163,6 +159,7 @@
                   </Table.Cell>
                   <Table.Cell>
                     <TableInput
+                      class="max-w-24"
                       on:change={async () => await saveSeasons()}
                       step={0.01}
                       placeholder="Expenses"
@@ -173,6 +170,7 @@
                   </Table.Cell>
                   <Table.Cell>
                     <TableInput
+                      class="max-w-24"
                       on:change={async () => await saveSeasons()}
                       step={0.01}
                       placeholder="Estimated Sell Price"
@@ -183,6 +181,7 @@
                   </Table.Cell>
                   <Table.Cell>
                     <TableInput
+                      class="max-w-24"
                       on:change={async () => await saveSeasons()}
                       step={0.01}
                       placeholder="Actual Sell Price"
@@ -215,6 +214,7 @@
                       />
                     </div>
                   </Table.Cell>
+                  <Table.Cell class="max-w-24 text-right">TBA</Table.Cell>
                 </Table.Row>
               {/each}
               <Button

@@ -60,20 +60,30 @@ export class StorageManager {
 
   async addItemToEpisode(episodeId: string) {
     try {
-      const itemToAdd = defaultItem;
+      // deep clone the default item to avoid reference issues this took me way too much time to figure out lol
+      let itemToAdd = JSON.parse(JSON.stringify(defaultItem));
+
+      let newId = v4();
+      console.log(defaultItem);
+
       itemToAdd.episodeId = episodeId;
+      itemToAdd.id = newId;
+
+      // add the item
       this.seasons.data.forEach((season) => {
         season.episodes.forEach((episode) => {
           if (episode.id === episodeId) {
             itemToAdd.seasonId = season.id;
-            itemToAdd.id = v4();
-            episode.items.push(defaultItem);
+            episode.items.push(itemToAdd);
           }
         });
       });
+
+      // save it
       await this.saveAllSeasons(this.seasons);
       return true;
     } catch (e) {
+      console.error("Error adding item to episode:", e);
       return false;
     }
   }
@@ -141,6 +151,7 @@ export class StorageManager {
   }
 
   async saveAllSeasons(seasons: { data: Season[] }) {
+    console.log("saving all seasons");
     try {
       await this.saveFile("seasons.json", JSON.stringify(seasons));
       this.seasons = seasons;

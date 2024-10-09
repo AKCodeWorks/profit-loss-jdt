@@ -13,9 +13,9 @@
   "app": {
     "windows": [
       {
-        "title": "Joey Does Tech | Profit or Loss",
-        "width": 800,
-        "height": 600
+        "title": "Joey's Completely Over-Engineered Spreadsheet",
+        "width": 1200,
+        "height": 800
       }
     ],
 

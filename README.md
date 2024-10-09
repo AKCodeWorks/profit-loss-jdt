@@ -34,4 +34,4 @@ All data is saved locally and does not require an internet connection to functio
 
 ## If you like what you see please consider supporting my work
 
-<a href="https://www.buymeacoffee.com/akcodeworks" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+<a href="buymeacoffee.com/akcoding916" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>

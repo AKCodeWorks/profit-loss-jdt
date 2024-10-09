@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     calcluateItemProfitLoss,
+    calculateEpisodeProfitLoss,
     safeParseFloat,
   } from "$lib/calculations/calculate-item-profit-loss";
 
@@ -9,6 +10,7 @@
   import DeleteItemDialog from "$lib/components/custom/dialogs/episodes/delete-item-dialog.svelte";
   import LabeledSelect from "$lib/components/custom/elements/labeled-select.svelte";
   import TableInput from "$lib/components/custom/table-input.svelte";
+  import { Item } from "$lib/components/ui/accordion";
   import { Button } from "$lib/components/ui/button";
   import * as Table from "$lib/components/ui/table";
   import { storage } from "$lib/helpers/storage/StorageManager";
@@ -108,32 +110,59 @@
         <Table.Head>Estimated Sell Price</Table.Head>
         <Table.Head>Actual Sell Price</Table.Head>
         <Table.Head>Time Spent (H:MM)</Table.Head>
-        <Table.Head class="text-right">Profit/Loss</Table.Head>
+        <Table.Head class="text-right ">Profit/Loss</Table.Head>
       </Table.Row>
     </Table.Header>
     <Table.Body>
       {#each seasons as season, seasonIndex}
         {#if selectedSeason ? season.id === selectedSeason : true}
-          <h4 class="font-bold ml-2 mt-2">{season.name}</h4>
+          <Table.Row class="bg-muted">
+            <Table.Cell colspan={7}>
+              <div class="flex items-center gap-4 justify-between">
+                <h2>{season.name}</h2>
+                <div>
+                  <Button
+                    on:click={async () => await addEpisode(season.id)}
+                    size="sm"
+                    variant="outline"
+                    class="opacity-80 text-primary ">+ Episode</Button
+                  >
+                </div>
+              </div>
+            </Table.Cell>
+          </Table.Row>
+
           {#each season.episodes as episode, episodeIndex}
             {#if selectedEpisode ? episode.id === selectedEpisode : true}
-              <div class="flex items-center gap-2">
-                <DeleteEpisodeDialog
-                  on:episodeDeleted={() => (seasons = storage.seasons.data)}
-                  episodeId={episode.id}
-                />
-                <TableInput
-                  on:change={async () => await saveSeasons()}
-                  class="ml-2 h-fit py-1 max-w-36"
-                  placeholder="Episode Name"
-                  type="text"
-                  noCurrency
-                  bind:value={seasons[seasonIndex].episodes[episodeIndex].name}
-                />
-              </div>
+              <Table.Row class="border-t-2 ">
+                <Table.Cell colspan={7}>
+                  <div class="flex items-center gap-2">
+                    <DeleteEpisodeDialog
+                      on:episodeDeleted={() => (seasons = storage.seasons.data)}
+                      episodeId={episode.id}
+                    />
+                    <TableInput
+                      on:change={async () => await saveSeasons()}
+                      class="ml-2 h-fit py-1 max-w-48 font-bold text-lg"
+                      placeholder="Episode Name"
+                      type="text"
+                      noCurrency
+                      bind:value={seasons[seasonIndex].episodes[episodeIndex]
+                        .name}
+                    />
+
+                    <Button
+                      on:click={async () => await addItem(episode.id)}
+                      size="sm"
+                      variant="outline"
+                      class=" ml-auto">+ Item</Button
+                    >
+                  </div>
+                </Table.Cell>
+              </Table.Row>
 
               {#each episode.items as item, itemIndex}
-                <Table.Row>
+                <Table.Row class="odd:bg-muted">
                   <Table.Cell class="font-medium">
                     <div class="flex items-center gap-1">
                       <DeleteItemDialog
@@ -157,7 +186,7 @@
                       class="max-w-24"
                       on:change={async () => await saveSeasons()}
                       step={0.01}
-                      placeholder="Cost"
+                      placeholder="-"
                       type="number"
                       bind:value={seasons[seasonIndex].episodes[episodeIndex]
                         .items[itemIndex].cost}
@@ -168,7 +197,7 @@
                       class="max-w-24"
                       on:change={async () => await saveSeasons()}
                       step={0.01}
-                      placeholder="Expenses"
+                      placeholder="-"
                       type="number"
                       bind:value={seasons[seasonIndex].episodes[episodeIndex]
                         .items[itemIndex].expenses}
@@ -179,7 +208,7 @@
                       class="max-w-24"
                       on:change={async () => await saveSeasons()}
                       step={0.01}
-                      placeholder="Estimated Sell Price"
+                      placeholder="-"
                       type="number"
                       bind:value={seasons[seasonIndex].episodes[episodeIndex]
                         .items[itemIndex].estimatedSellPrice}
@@ -190,7 +219,7 @@
                       class="max-w-24"
                       on:change={async () => await saveSeasons()}
                       step={0.01}
-                      placeholder="Actual Sell Price"
+                      placeholder="-"
                       type="number"
                       bind:value={seasons[seasonIndex].episodes[episodeIndex]
                         .items[itemIndex].actualSellPrice}
@@ -213,7 +242,7 @@
                         class="w-16"
                         on:change={async () => await saveSeasons()}
                         step={1}
-                        placeholder="Minutes"
+                        placeholder="MM"
                         type="number"
                         bind:value={seasons[seasonIndex].episodes[episodeIndex]
                           .items[itemIndex].timeSpentMinutes}
@@ -222,38 +251,61 @@
                   </Table.Cell>
                   <Table.Cell
                     class={cn(
-                      "max-w-24 text-right text-lg font-bold",
+                      " text-right font-bold  items-center gap-4",
                       safeParseFloat(calcluateItemProfitLoss(item, true)) < 0 &&
                         "text-red-500",
                       safeParseFloat(calcluateItemProfitLoss(item, true)) > 0 &&
                         "text-green-500"
                     )}
                   >
-                    {calcluateItemProfitLoss(
-                      item,
-                      true,
-                      storage.config?.locale,
-                      storage.config?.currency
-                    )}</Table.Cell
-                  >
+                    <h3>
+                      {calcluateItemProfitLoss(
+                        item,
+                        true,
+                        storage.config?.locale,
+                        storage.config?.currency
+                      )}
+                    </h3>
+
+                    <small class="text-xs text-muted-foreground">
+                      {item.actualSellPrice ? "" : "(estimated)"}
+                    </small>
+                  </Table.Cell>
                 </Table.Row>
               {/each}
-              <Button
-                on:click={async () => await addItem(episode.id)}
-                size="sm"
-                variant="ghost"
-                class="opacity-50 ml-2">+ Item</Button
-              >
+              {#if episode.items.length > 1}
+                <Table.Row class="bg-primary/10 hover:bg-primary/10">
+                  <Table.Cell></Table.Cell>
+                  <Table.Cell></Table.Cell>
+                  <Table.Cell></Table.Cell>
+                  <Table.Cell></Table.Cell>
+                  <Table.Cell></Table.Cell>
+                  <Table.Cell
+                    ><p class="text-large text-right font-bold">
+                      {episode.name} Profit/Loss:
+                    </p></Table.Cell
+                  >
+                  <Table.Cell
+                    class={cn(
+                      "max-w-24  text-lg text-left font-bold",
+                      safeParseFloat(
+                        calculateEpisodeProfitLoss(episode, "en-GB", "GBP")
+                      ) < 0 && "text-red-500",
+                      safeParseFloat(
+                        calculateEpisodeProfitLoss(episode, "en-GB", "GBP")
+                      ) > 0 && "text-green-500"
+                    )}
+                  >
+                    {calculateEpisodeProfitLoss(
+                      episode,
+                      storage.config?.locale || "en-GB",
+                      storage.config?.currency || "GBP"
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              {/if}
             {/if}
           {/each}
-          <div>
-            <Button
-              on:click={async () => await addEpisode(season.id)}
-              size="sm"
-              variant="ghost"
-              class="opacity-80 text-primary">+ Episode</Button
-            >
-          </div>
         {/if}
       {/each}
     </Table.Body>

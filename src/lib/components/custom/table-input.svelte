@@ -18,7 +18,7 @@
 
 <div class="flex items-center">
   {#if !noCurrency}
-    <span class="font-bold mr-1"
+    <span class="font-bold mr-2"
       >{storage?.config?.currency == "GBP" ? "£" : "$"}</span
     >
   {/if}
@@ -30,7 +30,10 @@
     on:change
     on:focus={(e) => e?.currentTarget?.select()}
     {type}
-    class={cn("border-none shadow-none max-w-sm", className)}
+    class={cn(
+      "border-none shadow-none max-w-sm bg-transparent rounded-sm h-fit py-1",
+      className
+    )}
     bind:value
   />
 </div>

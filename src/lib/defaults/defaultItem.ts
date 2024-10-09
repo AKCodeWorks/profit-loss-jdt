@@ -6,9 +6,4 @@ export const defaultItem: Item = {
   name: "",
   episodeId: "",
   seasonId: "",
-  cost: 0,
-  estimatedSellPrice: 0,
-  actualSellPrice: 0,
-  timeSpentHours: 0,
-  timeSpentMinutes: 0,
 };

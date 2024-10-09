@@ -16,6 +16,14 @@
     }
   });
 
+  function calculateNumberOfItems(season: Season) {
+    let items = 0;
+    season.episodes.forEach((episode) => {
+      items += episode.items.length;
+    });
+    return items;
+  }
+
   async function saveSeasons() {
     console.log("saving seasons");
     try {
@@ -80,7 +88,7 @@
             />
           </Table.Cell>
           <Table.Cell>{season.episodes.length}</Table.Cell>
-          <Table.Cell>{season.items.length}</Table.Cell>
+          <Table.Cell>{calculateNumberOfItems(season)}</Table.Cell>
         </Table.Row>
       {/each}
     </Table.Body>

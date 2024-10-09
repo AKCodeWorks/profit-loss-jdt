@@ -1,4 +1,4 @@
-import type { Item } from "$lib/interfaces";
+import type { Episode, Item } from "$lib/interfaces";
 
 export function safeParseFloat(value: number | undefined | string): number {
   if (value === undefined) return 0;
@@ -56,4 +56,21 @@ export function calcluateItemProfitLoss(
   }
 
   return result;
+}
+
+export function calculateEpisodeProfitLoss(
+  episode: Episode,
+  locale: string,
+  currency: string
+) {
+  let total = 0;
+
+  episode.items.forEach((item) => {
+    total += safeParseFloat(calcluateItemProfitLoss(item));
+  });
+
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(total);
 }

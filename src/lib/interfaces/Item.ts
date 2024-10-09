@@ -4,7 +4,7 @@ export interface Item {
   episodeId: string;
   shippingCost?: number;
   seasonId: string;
-  cost: number;
+  cost?: number;
   estimatedSellPrice?: number;
   actualSellPrice?: number;
   timeSpentHours?: number;

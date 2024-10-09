@@ -23,12 +23,9 @@
 </script>
 
 <AlertDialog.Root bind:open>
-  <AlertDialog.Trigger
-    ><Icon
-      icon="mdi:close"
-      class="text-red-500 size-5 active:scale-95"
-    /></AlertDialog.Trigger
-  >
+  <AlertDialog.Trigger>
+    <Icon icon="mdi:close" class="text-red-500 size-5 active:scale-95" />
+  </AlertDialog.Trigger>
   <AlertDialog.Content>
     <AlertDialog.Header>
       <AlertDialog.Title>Heads Up!</AlertDialog.Title>

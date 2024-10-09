@@ -100,36 +100,32 @@ export class StorageManager {
 
   async createEpisode(seasonId: string) {
     try {
-      const season = this.seasons.data.filter((season) => {
-        return season.id === seasonId;
-      });
+      // find season by id
+      const season = this.seasons.data.find((s) => s.id === seasonId);
 
-      if (season.length === 0) {
-        return false;
-      }
+      // no season no problems
+      if (!season) return false;
 
-      const newEpisode = defaultEpisode;
+      // deep clone the default episode to avoid reference issues
+      let newEpisode = JSON.parse(JSON.stringify(defaultEpisode));
       newEpisode.seasonId = seasonId;
       newEpisode.id = v4();
-      season[0].episodes.push(newEpisode);
-      // filters out the selected season
-      this.seasons.data = this.seasons.data.filter((s) => {
-        return s.id !== seasonId;
-      });
-      // sort the episodes by name
-      season[0].episodes.sort((a, b) => {
-        return b.name.localeCompare(a.name);
-      });
-      this.seasons.data.push(season[0]);
-      // sort the seasons by name after adding in the new data
-      this.seasons.data.sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      });
 
+      // add the new epsiode
+      season.episodes.push(newEpisode);
+
+      // sort the episodes by name
+      season.episodes.sort((a, b) => b.name.localeCompare(a.name));
+
+      // sort the seasons to make sure nothing got borked here...this might not be needed but the performance hit is super low
+      this.seasons.data.sort((a, b) => a.name.localeCompare(b.name));
+
+      // save it all
       await this.saveAllSeasons(this.seasons);
 
       return true;
     } catch (e) {
+      console.error("Error creating episode:", e);
       return false;
     }
   }

@@ -37,6 +37,15 @@ export class StorageManager {
 
   // episode methods
 
+  async deleteEpisode(episodeId: string) {
+    this.seasons.data.forEach((season) => {
+      season.episodes = season.episodes.filter((episode) => {
+        return episode.id !== episodeId;
+      });
+    });
+    await this.saveAllSeasons(this.seasons);
+  }
+
   async createEpisode(seasonId: string) {
     console.log("creati episode");
     console.log(this.seasons.data);

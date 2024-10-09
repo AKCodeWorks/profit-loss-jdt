@@ -3,18 +3,18 @@
   import Icon from "@iconify/svelte";
   import { storage } from "$lib/helpers/storage/StorageManager";
   import { toast } from "svelte-sonner";
-  export let seasonId: string;
+  export let episodeId: string;
   let open: boolean = false;
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   async function deleteSeason() {
     try {
-      await storage?.deleteSeason(seasonId);
-      toast.success("Season deleted successfully");
-      dispatch("seasonDeleted");
+      await storage?.deleteEpisode(episodeId);
+      toast.success("Episode deleted successfully");
+      dispatch("episodeDeleted");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete season");
+      toast.error("Failed to delete episode");
     }
   }
 </script>
@@ -30,9 +30,8 @@
     <AlertDialog.Header>
       <AlertDialog.Title>Heads Up!</AlertDialog.Title>
       <AlertDialog.Description>
-        Deleting this season will also delete all associated episodes and items!
-        This action CANNOT be undone! Are you sure you want to delete this
-        season?
+        Deleting this episode will also delete all associated items. This action
+        cannot be undone. Are you sure you want to delete this episode?
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>

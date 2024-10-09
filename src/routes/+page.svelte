@@ -1,5 +1,8 @@
 <script lang="ts">
+  import DeleteEpisodeDialog from "$lib/components/custom/dialogs/episodes/delete-episode.dialog.svelte";
+  import LabeledInput from "$lib/components/custom/elements/labeled-input.svelte";
   import LabeledSelect from "$lib/components/custom/elements/labeled-select.svelte";
+  import TableInput from "$lib/components/custom/table-input.svelte";
   import { Button } from "$lib/components/ui/button";
   import * as Table from "$lib/components/ui/table";
   import { storage } from "$lib/helpers/storage/StorageManager";
@@ -63,11 +66,11 @@
   {/if}
 </div>
 
-<Table.Root>
+<Table.Root class="px-4">
   <Table.Caption>Joey's Completely Over-Engineered Spreadsheet</Table.Caption>
   <Table.Header>
     <Table.Row>
-      <Table.Head class="w-[100px]">Item</Table.Head>
+      <Table.Head>Item</Table.Head>
       <Table.Head>Cost</Table.Head>
       <Table.Head>Expenses</Table.Head>
       <Table.Head>Estimated Sell Price</Table.Head>
@@ -77,25 +80,49 @@
     </Table.Row>
   </Table.Header>
   <Table.Body>
-    {#each seasons as season, index}
+    {#each seasons as season, seasonIndex}
       {#if selectedSeason ? season.id === selectedSeason : true}
-        <p class="font-bold ml-2 mt-2">{season.name}</p>
-        {#each season.episodes as episode, index}
+        <h4 class="font-bold ml-2 mt-2">{season.name}</h4>
+        {#each season.episodes as episode, episodeIndex}
           {#if selectedEpisode ? episode.id === selectedEpisode : true}
-            <Table.Row>
-              <Table.Cell class="font-medium">INV001</Table.Cell>
-              <Table.Cell>Paid</Table.Cell>
-              <Table.Cell>Credit Card</Table.Cell>
-              <Table.Cell class="text-right">$250.00</Table.Cell>
-            </Table.Row>
+            <div class="flex items-center gap-2">
+              <DeleteEpisodeDialog
+                on:episodeDeleted={() => (seasons = storage.seasons.data)}
+                episodeId={episode.id}
+              />
+              <TableInput
+                class="ml-2 h-fit py-1 w-fit"
+                placeholder="Episode Name"
+                type="text"
+                noCurrency
+                bind:value={seasons[seasonIndex].episodes[episodeIndex].name}
+              />
+            </div>
+
+            {#each episode.items as item, itemIndex}
+              <Table.Row>
+                <Table.Cell class="font-medium"></Table.Cell>
+                <Table.Cell>Paid</Table.Cell>
+                <Table.Cell>Credit Card</Table.Cell>
+                <Table.Cell class="text-right">$250.00</Table.Cell>
+              </Table.Row>
+            {/each}
+            <Button
+              on:click={async () => await addEpisode(season.id)}
+              size="sm"
+              variant="ghost"
+              class="opacity-50 ml-2">+ Item</Button
+            >
           {/if}
         {/each}
-        <Button
-          on:click={async () => await addEpisode(season.id)}
-          size="sm"
-          variant="ghost"
-          class="opacity-50">+ Episode</Button
-        >
+        <div>
+          <Button
+            on:click={async () => await addEpisode(season.id)}
+            size="sm"
+            variant="ghost"
+            class="opacity-80 text-primary">+ Episode</Button
+          >
+        </div>
       {/if}
     {/each}
   </Table.Body>

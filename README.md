@@ -15,19 +15,27 @@ This is currently under development. If you choose to install this program in it
   ![installer](installscreen.png)
 - Click download.
 
-## CODE SIGNING
+## Code Sigining and Windows Installer Warnings
 
-- When you install this app it will say that SmartScreen is protecting your computer. That is because the code is not signed. This is a $270/year fee that I do not want to spend on such a pet project.
+- When you install this app it will say that SmartScreen is protecting your computer. That is because the code is not signed.
 
-- Do not install any other copies of this application unless it is known to have been downloaded directly from this repository.
+  - Okay then just sign your code then!
+    - That is a $270/year fee that I do not want to spend on such a pet project.
+  - Does that mean this software is not safe?
+    - No, it just means that I have not gotten the code signature.
+  - What is a code signature?
+    - Code signatures are what verifies a piece of software is developed by the person who is distributing it.
+    - This really matters if you do not download this from the source. This GitHub repository should be the only place you ever download this application from.
+
+- **Do not install any other copies of this application unless it is known to have been downloaded directly from this repository.**
 
 - To continue with the installation click on the "More Info" link and proceed anyways.
 
-## What this application does
+## What is this for?
 
-This app has been made for Joey of the Joey Does Tech YouTube channel. This app serves as a local repository of profit and loss tracking as well as time tracking.
+This is an extremely niche app for Joey of the Joey Does Tech YouTube channel. This would serve as a pseudo "asset tracker" for hist popular series "Profit or Loss"
 
-All data is saved locally and does not require an internet connection to function
+All data is saved locally and does not require an internet connection to function.
 
 > Note: This application does utilize the Iconify and Google Fonts API. If you are not connected to the internet, the font will be set to your system font and icons will not display. The app will still function, but it just won't be as pretty.
 

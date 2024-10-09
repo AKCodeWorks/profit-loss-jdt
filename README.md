@@ -30,7 +30,13 @@ All data is saved locally and does not require an internet connection to functio
 
 > Note: This application does utilize the Iconify and Google Fonts API. If you are not connected to the internet, the font will be set to your system font and icons will not display. The app will still function, but it just won't be as pretty.
 
-## You may support Joey and his YouTube channel [here](https://www.youtube.com/c/JoeyDoesTech)
+## You may support Joey below
+
+- [YouTube](https://www.youtube.com/c/JoeyDoesTech)
+- [Twitch](https://twitch.tv/joeydoestech)
+- [eBay Store](https://ebay.co.uk/str/joeydoestech)
+- [Instagram](https://www.instagram.com/joeydoestech)
+- [Website](https://www.joeydoestech.com)
 
 ## If you like what you see please consider supporting my work
 

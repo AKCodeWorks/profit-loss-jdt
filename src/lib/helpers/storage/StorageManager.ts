@@ -137,6 +137,10 @@ export class StorageManager {
         return season.id !== seasonId;
       });
       await this.saveAllSeasons(this.seasons);
+      if (this?.config?.defaultSeason === seasonId) {
+        this.config.defaultSeason = null;
+        await this.saveConfig(this.config);
+      }
       return true;
     } catch (e) {
       return false;

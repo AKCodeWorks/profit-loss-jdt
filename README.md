@@ -19,7 +19,7 @@ This is currently under development. If you choose to install this program in it
 
 - When you install this app it will say that SmartScreen is protecting your computer. That is because the code is not signed.
 
-  - Okay then just sign your code then!
+  - Okay...just sign your code then!
     - That is a $270/year fee that I do not want to spend on such a pet project.
   - Does that mean this software is not safe?
     - No, it just means that I have not gotten the code signature.

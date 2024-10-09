@@ -83,12 +83,12 @@
         bind:value={selectedSeason}
       />
     {/if}
-    {#if selectedSeason && seasons.filter((s) => s.id === selectedSeason)[0].episodes.length > 0}
+    {#if selectedSeason && seasons.filter((s) => s.id === selectedSeason)[0]?.episodes.length > 0}
       <LabeledSelect
         class="w-48"
         isNullable
         clearText="All"
-        options={seasons.filter((s) => s.id === selectedSeason)[0].episodes}
+        options={seasons.filter((s) => s.id === selectedSeason)[0]?.episodes}
         labelKey="name"
         label="Episode"
         key="id"

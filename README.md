@@ -33,7 +33,7 @@ This is currently under development. If you choose to install this program in it
 
 ## What is this for?
 
-This is an extremely niche app for Joey of the Joey Does Tech YouTube channel. This would serve as a pseudo "asset tracker" for hist popular series "Profit or Loss"
+This is an extremely niche app for Joey of the Joey Does Tech YouTube channel. This would serve as a pseudo "asset tracker" for his popular series "Profit or Loss"
 
 All data is saved locally and does not require an internet connection to function.
 

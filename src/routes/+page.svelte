@@ -1,4 +1,9 @@
 <script lang="ts">
+  import {
+    calcluateItemProfitLoss,
+    safeParseFloat,
+  } from "$lib/calculations/calculate-item-profit-loss";
+
   //TODO: Clean up this file with some components
   import DeleteEpisodeDialog from "$lib/components/custom/dialogs/episodes/delete-episode-dialog.svelte";
   import DeleteItemDialog from "$lib/components/custom/dialogs/episodes/delete-item-dialog.svelte";
@@ -7,6 +12,7 @@
   import { Button } from "$lib/components/ui/button";
   import * as Table from "$lib/components/ui/table";
   import { storage } from "$lib/helpers/storage/StorageManager";
+  import { cn } from "$lib/utils";
   import { onMount } from "svelte";
   import { toast } from "svelte-sonner";
 
@@ -214,7 +220,22 @@
                       />
                     </div>
                   </Table.Cell>
-                  <Table.Cell class="max-w-24 text-right">TBA</Table.Cell>
+                  <Table.Cell
+                    class={cn(
+                      "max-w-24 text-right text-lg font-bold",
+                      safeParseFloat(calcluateItemProfitLoss(item, true)) < 0 &&
+                        "text-red-500",
+                      safeParseFloat(calcluateItemProfitLoss(item, true)) > 0 &&
+                        "text-green-500"
+                    )}
+                  >
+                    {calcluateItemProfitLoss(
+                      item,
+                      true,
+                      storage.config?.locale,
+                      storage.config?.currency
+                    )}</Table.Cell
+                  >
                 </Table.Row>
               {/each}
               <Button

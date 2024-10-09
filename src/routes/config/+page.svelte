@@ -48,6 +48,16 @@
       labelKey="label"
       description="Changes the spelling of certain words in some cases."
     />
+    <LabeledSelect
+      id="season"
+      isNullable
+      label="Default Season"
+      bind:value={config.defaultSeason}
+      options={storage.seasons.data}
+      key="id"
+      labelKey="name"
+      description="Sets the default season to be displayed when the app is opened."
+    />
     <div class="flex items-center gap-4">
       <Button href="/" variant="secondary">Go Back</Button>
       <Button on:click={async () => await updateConfig()}

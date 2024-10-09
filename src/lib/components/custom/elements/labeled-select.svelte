@@ -38,6 +38,14 @@
   $: if (!value) {
     placeholder = "";
   }
+
+  $: {
+    if (value) {
+      const selected = options?.find((o) => o[key] === value);
+      if (!selected) placeholder = clearText;
+      placeholder = selected && selected[labelKey];
+    }
+  }
 </script>
 
 <div class={cn("flex w-full flex-col gap-1.5", className)}>

@@ -1,4 +1,4 @@
-import type { Episode, Item } from "$lib/interfaces";
+import type { Episode, Item, Season } from "$lib/interfaces";
 
 export function safeParseFloat(value: number | undefined | string): number {
   if (value === undefined) return 0;
@@ -43,8 +43,9 @@ export function calcluateItemProfitLoss(
   }
 
   let consumables = safeParseFloat(item.cost);
+  let expenses = safeParseFloat(item.expenses);
   let shippingCost = safeParseFloat(item.shippingCost);
-  let totalExpense = consumables + shippingCost;
+  let totalExpense = consumables + shippingCost + expenses;
 
   let result = sellingPrice - totalExpense;
 
@@ -73,4 +74,37 @@ export function calculateEpisodeProfitLoss(
     style: "currency",
     currency: currency,
   }).format(total);
+}
+
+export function calculateSeasonTotalProfitLoss(
+  season: Season,
+  locale: string,
+  currency: string
+) {
+  let total = 0;
+
+  season.episodes.forEach((episode) => {
+    total += safeParseFloat(
+      calculateEpisodeProfitLoss(episode, locale, currency)
+    );
+  });
+
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(total);
+}
+
+export function calculateSeasonGoalPercentage(season: Season) {
+  let total = 0;
+
+  season.episodes.forEach((episode) => {
+    total += safeParseFloat(
+      calculateEpisodeProfitLoss(episode, "en-GB", "GBP")
+    );
+  });
+
+  let percentage = (total / season.goal) * 100;
+
+  return percentage.toFixed(1);
 }

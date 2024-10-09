@@ -15,7 +15,7 @@ This is currently under development. If you choose to install this program in it
   ![installer](installscreen.png)
 - Click download.
 
-## Code Sigining and Windows Installer Warnings
+## Code Signing and Windows Installer Warnings
 
 - When you install this app it will say that SmartScreen is protecting your computer. That is because the code is not signed.
 
@@ -49,4 +49,4 @@ All data is saved locally and does not require an internet connection to functio
 
 ## Support the Developer Here
 
-<a href="buymeacoffee.com/akcoding916" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+<a href="https://buymeacoffee.com/akcoding916" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>

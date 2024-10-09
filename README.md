@@ -8,7 +8,7 @@ This is currently under development. If you choose to install this program in it
 
 You may download a development installer here.
 
-- [JDTInstaller](profit-loss-jdt-installer.exe)
+- [JDTInstaller](installers)
 
 Click on the three dots on the right side of the screen then click download
 

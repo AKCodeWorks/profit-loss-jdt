@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CreateSeasonDialog from "$lib/components/custom/dialogs/create-season-dialog.svelte";
+  import CreateSeasonDialog from "$lib/components/custom/dialogs/seasons/create-season-dialog.svelte";
   import * as Table from "$lib/components/ui/table";
-  import DeleteSeasonAlert from "$lib/components/custom/dialogs/delete-season-alert.svelte";
+  import DeleteSeasonAlert from "$lib/components/custom/dialogs/seasons/delete-season-alert.svelte";
   import { storage } from "$lib/helpers/storage/StorageManager";
   import type { Season } from "$lib/interfaces/Season";
   import { onMount } from "svelte";

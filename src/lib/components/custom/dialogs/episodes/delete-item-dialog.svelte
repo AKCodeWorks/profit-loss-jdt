@@ -3,11 +3,15 @@
   import Icon from "@iconify/svelte";
   import { storage } from "$lib/helpers/storage/StorageManager";
   import { toast } from "svelte-sonner";
+  import { createEventDispatcher } from "svelte";
+
   export let episodeId: string;
   export let itemId: string;
+
   let open: boolean = false;
-  import { createEventDispatcher } from "svelte";
+
   const dispatch = createEventDispatcher();
+
   async function deleteItem() {
     try {
       await storage?.removeItemFromEpisode(episodeId, itemId);

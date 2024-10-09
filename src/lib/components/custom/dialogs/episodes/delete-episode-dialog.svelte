@@ -1,12 +1,15 @@
 <script lang="ts">
   import * as AlertDialog from "$lib/components/ui/alert-dialog";
   import Icon from "@iconify/svelte";
+  import { createEventDispatcher } from "svelte";
   import { storage } from "$lib/helpers/storage/StorageManager";
   import { toast } from "svelte-sonner";
+
   export let episodeId: string;
   let open: boolean = false;
-  import { createEventDispatcher } from "svelte";
+
   const dispatch = createEventDispatcher();
+
   async function deleteSeason() {
     try {
       await storage?.deleteEpisode(episodeId);

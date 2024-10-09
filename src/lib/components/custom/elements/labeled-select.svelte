@@ -5,12 +5,8 @@
   import { cn } from "$lib/utils";
 
   const dispatch = createEventDispatcher();
-  function handleChange(event: any) {
-    if (!event && !isNullable) return;
-    dispatch("selectedChange", event);
-    value = event;
-  }
 
+  export { className as class };
   export let options: Array<{ [key: string]: any }>;
   export let key: string;
   export let labelKey: string;
@@ -22,6 +18,7 @@
   export let id: string = "";
   export let error: string[] | undefined = undefined;
   export let clearText: string = "Please select an option...";
+
   let className: string = "";
 
   onMount(() => {
@@ -32,11 +29,15 @@
     }
   });
 
+  function handleChange(event: any) {
+    if (!event && !isNullable) return;
+    dispatch("selectedChange", event);
+    value = event;
+  }
+
   $: if (!value) {
     placeholder = "";
   }
-
-  export { className as class };
 </script>
 
 <div class={cn("flex w-full flex-col gap-1.5", className)}>

@@ -7,8 +7,8 @@
   type $$Events = InputEvents;
 
   let className: HTMLInputAttributes["class"] = undefined;
-  export let value: HTMLInputAttributes["value"] = undefined;
 
+  export let value: HTMLInputAttributes["value"] = undefined;
   export { className as class };
   export let id: string = "";
   export let description: string = "";

@@ -1,18 +1,12 @@
-import type { Config } from "$lib/interfaces/Config";
+import type { Season, Config } from "$lib/interfaces";
 import {
   exists,
   BaseDirectory,
   writeTextFile,
   readTextFile,
 } from "@tauri-apps/plugin-fs";
-import { defaultConfig } from "$lib/defaults/defaultConfig";
-import exp from "constants";
-import type { Season } from "$lib/interfaces/Season";
 import { v4 } from "uuid";
-import type { Episode } from "$lib/interfaces/Episode";
-import { defaultEpisode } from "$lib/defaults/defaultEpisode";
-import type { Item } from "$lib/interfaces/Item";
-import { defaultItem } from "$lib/defaults/defaultItem";
+import { defaultEpisode, defaultItem, defaultConfig } from "$lib/defaults";
 
 // this class makes handling local data a lot easer so you do not have to invoke the rust API a million times
 
@@ -23,15 +17,23 @@ export class StorageManager {
 
   // since the rust fs module is async we have to initialize the storage manager
   async init() {
-    await this.getConfig();
-    await this.getAllSeasons();
-    this.ready = true;
+    try {
+      await this.getConfig();
+      await this.getAllSeasons();
+      this.ready = true;
+    } catch (e) {
+      this.ready = false;
+      return false;
+    }
   }
 
   async updateConfig(config: Config) {
-    console.log("updating config");
-    this.config = config;
-    await this.saveConfig(config);
+    try {
+      this.config = config;
+      await this.saveConfig(config);
+    } catch (e) {
+      return false;
+    }
   }
 
   // private methods
@@ -39,110 +41,146 @@ export class StorageManager {
   // episode methods
 
   async removeItemFromEpisode(episodeId: string, itemId: string) {
-    this.seasons.data.forEach((season) => {
-      season.episodes.forEach((episode) => {
-        if (episode.id === episodeId) {
-          episode.items = episode.items.filter((item) => {
-            return item.id !== itemId;
-          });
-        }
+    try {
+      this.seasons.data.forEach((season) => {
+        season.episodes.forEach((episode) => {
+          if (episode.id === episodeId) {
+            episode.items = episode.items.filter((item) => {
+              return item.id !== itemId;
+            });
+          }
+        });
       });
-    });
-    await this.saveAllSeasons(this.seasons);
-    return true;
+      await this.saveAllSeasons(this.seasons);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   async addItemToEpisode(episodeId: string) {
-    const itemToAdd = defaultItem;
-    itemToAdd.episodeId = episodeId;
-
-    this.seasons.data.forEach((season) => {
-      season.episodes.forEach((episode) => {
-        if (episode.id === episodeId) {
-          itemToAdd.seasonId = season.id;
-          itemToAdd.id = v4();
-          episode.items.push(defaultItem);
-        }
+    try {
+      const itemToAdd = defaultItem;
+      itemToAdd.episodeId = episodeId;
+      this.seasons.data.forEach((season) => {
+        season.episodes.forEach((episode) => {
+          if (episode.id === episodeId) {
+            itemToAdd.seasonId = season.id;
+            itemToAdd.id = v4();
+            episode.items.push(defaultItem);
+          }
+        });
       });
-    });
-    await this.saveAllSeasons(this.seasons);
-    return true;
+      await this.saveAllSeasons(this.seasons);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   async deleteEpisode(episodeId: string) {
-    this.seasons.data.forEach((season) => {
-      season.episodes = season.episodes.filter((episode) => {
-        return episode.id !== episodeId;
+    try {
+      this.seasons.data.forEach((season) => {
+        season.episodes = season.episodes.filter((episode) => {
+          return episode.id !== episodeId;
+        });
       });
-    });
-    await this.saveAllSeasons(this.seasons);
+      await this.saveAllSeasons(this.seasons);
+    } catch (e) {
+      return false;
+    }
   }
 
   async createEpisode(seasonId: string) {
-    const season = this.seasons.data.filter((season) => {
-      return season.id === seasonId;
-    });
+    try {
+      const season = this.seasons.data.filter((season) => {
+        return season.id === seasonId;
+      });
 
-    if (season.length === 0) {
+      if (season.length === 0) {
+        return false;
+      }
+
+      const newEpisode = defaultEpisode;
+      newEpisode.seasonId = seasonId;
+      newEpisode.id = v4();
+      season[0].episodes.push(newEpisode);
+      // filters out the selected season
+      this.seasons.data = this.seasons.data.filter((s) => {
+        return s.id !== seasonId;
+      });
+      // sort the episodes by name
+      season[0].episodes.sort((a, b) => {
+        return b.name.localeCompare(a.name);
+      });
+      this.seasons.data.push(season[0]);
+      // sort the seasons by name after adding in the new data
+      this.seasons.data.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+
+      await this.saveAllSeasons(this.seasons);
+
+      return true;
+    } catch (e) {
       return false;
     }
-
-    const newEpisode = defaultEpisode;
-    newEpisode.seasonId = seasonId;
-    newEpisode.id = v4();
-    season[0].episodes.push(newEpisode);
-    // needto filter out the season that was updated and then add it back in
-    this.seasons.data = this.seasons.data.filter((s) => {
-      return s.id !== seasonId;
-    });
-    // sort the episodes by name
-    season[0].episodes.sort((a, b) => {
-      return b.name.localeCompare(a.name);
-    });
-    this.seasons.data.push(season[0]);
-    this.seasons.data.sort((a, b) => {
-      return a.name.localeCompare(b.name);
-    });
-
-    await this.saveAllSeasons(this.seasons);
-
-    return true;
   }
 
   // season methods
-  // TODO: WHEN A SEASON IS DELETED NEED TO UPDATE ALL ITEMS AND EPISODES TO BE DISSOCIATED FROM IT
   async deleteSeason(seasonId: string) {
-    this.seasons.data = this.seasons.data.filter((season) => {
-      return season.id !== seasonId;
-    });
-    await this.saveAllSeasons(this.seasons);
+    try {
+      this.seasons.data = this.seasons.data.filter((season) => {
+        return season.id !== seasonId;
+      });
+      await this.saveAllSeasons(this.seasons);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   async saveAllSeasons(seasons: { data: Season[] }) {
-    await this.saveFile("seasons.json", JSON.stringify(seasons));
-    this.seasons = seasons;
+    try {
+      await this.saveFile("seasons.json", JSON.stringify(seasons));
+      this.seasons = seasons;
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   async addSeason(season: Season) {
     season.id = v4();
-    this.seasons.data.push(season);
-    // sort the seasons by the name
-    this.seasons.data.sort((a, b) => {
-      return a.name.localeCompare(b.name);
-    });
-    await this.saveAllSeasons(this.seasons);
+    try {
+      this.seasons.data.push(season);
+      // sort the seasons by the name
+      this.seasons.data.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+      await this.saveAllSeasons(this.seasons);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   private async getAllSeasons() {
-    if (await this.fileExists("seasons.json")) {
-      const seasons = await readTextFile("seasons.json", {
-        baseDir: BaseDirectory.AppLocalData,
-      });
-      this.seasons = JSON.parse(seasons);
-      return JSON.parse(seasons);
-    } else {
-      this.seasons = { data: [] };
-      await this.saveAllSeasons({ data: [] });
+    try {
+      // if the file exists we read it and load it into the app
+      if (await this.fileExists("seasons.json")) {
+        const seasons = await readTextFile("seasons.json", {
+          baseDir: BaseDirectory.AppLocalData,
+        });
+        this.seasons = JSON.parse(seasons);
+        return JSON.parse(seasons);
+      } else {
+        // the file didnt exist so we initialize empty array and create the file for future use
+        this.seasons = { data: [] };
+        await this.saveAllSeasons({ data: [] });
+        return { data: [] };
+      }
+    } catch (e) {
       return { data: [] };
     }
   }
@@ -167,21 +205,34 @@ export class StorageManager {
   }
 
   private async saveConfig(config: Config) {
-    await this.saveFile("config.json", JSON.stringify(config));
+    try {
+      await this.saveFile("config.json", JSON.stringify(config));
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // file system methods
 
   private async fileExists(file: string) {
-    return await exists(file, {
-      baseDir: BaseDirectory.AppLocalData,
-    });
+    try {
+      return await exists(file, {
+        baseDir: BaseDirectory.AppLocalData,
+      });
+    } catch (e) {
+      return false;
+    }
   }
 
   private async saveFile(fileName: string, data: string) {
-    await writeTextFile(fileName, data, {
-      baseDir: BaseDirectory.AppLocalData,
-    });
+    try {
+      await writeTextFile(fileName, data, {
+        baseDir: BaseDirectory.AppLocalData,
+      });
+    } catch (e) {
+      return false;
+    }
   }
 }
 

@@ -4,7 +4,7 @@
   import { storage } from "$lib/helpers/storage/StorageManager";
   import type { Season } from "$lib/interfaces/Season";
   import { toast } from "svelte-sonner";
-  import LabeledInput from "../elements/labeled-input.svelte";
+  import LabeledInput from "../../elements/labeled-input.svelte";
   import { Button } from "$lib/components/ui/button";
   import { createEventDispatcher } from "svelte";
   import type { Config } from "$lib/interfaces/Config";

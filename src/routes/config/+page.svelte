@@ -1,5 +1,4 @@
 <script lang="ts">
-  import LabeledInput from "$lib/components/custom/elements/labeled-input.svelte";
   import LabeledSelect from "$lib/components/custom/elements/labeled-select.svelte";
   import Button from "$lib/components/ui/button/button.svelte";
   import { currencies } from "$lib/consts/currencies";
@@ -38,7 +37,6 @@
       options={currencies}
       key="value"
       labelKey="label"
-      on:selectedChange={(e) => console.log(e.detail)}
       description="This only changes the symbol, it does not perform currency exchange calculations."
     />
     <LabeledSelect
@@ -48,7 +46,6 @@
       options={locales}
       key="value"
       labelKey="label"
-      on:selectedChange={(e) => console.log(e.detail)}
       description="Changes the spelling of certain words in some cases."
     />
     <div class="flex items-center gap-4">

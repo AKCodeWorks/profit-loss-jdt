@@ -30,7 +30,7 @@ All data is saved locally and does not require an internet connection to functio
 
 > Note: This application does utilize the Iconify and Google Fonts API. If you are not connected to the internet, the font will be set to your system font and icons will not display. The app will still function, but it just won't be as pretty.
 
-## You may support Joey below
+## Support Joey Below
 
 - [YouTube](https://www.youtube.com/c/JoeyDoesTech)
 - [Twitch](https://twitch.tv/joeydoestech)
@@ -38,6 +38,6 @@ All data is saved locally and does not require an internet connection to functio
 - [Instagram](https://www.instagram.com/joeydoestech)
 - [Website](https://www.joeydoestech.com)
 
-## If you like what you see please consider supporting my work
+## Support the Developer Here
 
 <a href="buymeacoffee.com/akcoding916" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>

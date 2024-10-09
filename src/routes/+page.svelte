@@ -1,7 +1,7 @@
 <script lang="ts">
+  //TODO: Clean up this file with some components
   import DeleteEpisodeDialog from "$lib/components/custom/dialogs/episodes/delete-episode-dialog.svelte";
   import DeleteItemDialog from "$lib/components/custom/dialogs/episodes/delete-item-dialog.svelte";
-  import LabeledInput from "$lib/components/custom/elements/labeled-input.svelte";
   import LabeledSelect from "$lib/components/custom/elements/labeled-select.svelte";
   import TableInput from "$lib/components/custom/table-input.svelte";
   import { Button } from "$lib/components/ui/button";
@@ -13,6 +13,7 @@
   let seasons = storage?.seasons?.data;
   let selectedSeason: string = "";
   let selectedEpisode: string = "";
+
   $: if (storage.seasons) {
     seasons = storage.seasons.data;
   }
@@ -51,6 +52,7 @@
   }
 
   $: {
+    // this looks dumb but basically it just changes the text on the input when its cleared
     if (!selectedSeason) {
       selectedEpisode = "";
     }

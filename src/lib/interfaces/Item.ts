@@ -1,13 +1,12 @@
-import type { Episode } from "./Episode";
-import type { Season } from "./Season";
-
 export interface Item {
   id: string;
   name: string;
-  episode: Episode;
-  season: Season;
+  episodeId: string;
+  seasonId: string;
   cost: number;
-  estimatedSellPrice: number;
-  actualSellPrice: number;
-  timeSpent: number;
+  estimatedSellPrice?: number;
+  actualSellPrice?: number;
+  timeSpentHours?: number;
+  timeSpentMinutes?: number;
+  expenses?: number;
 }

@@ -1,5 +1,4 @@
 import type { Config } from "$lib/interfaces/Config";
-import { browser } from "$app/environment";
 import {
   exists,
   BaseDirectory,
@@ -12,6 +11,8 @@ import type { Season } from "$lib/interfaces/Season";
 import { v4 } from "uuid";
 import type { Episode } from "$lib/interfaces/Episode";
 import { defaultEpisode } from "$lib/defaults/defaultEpisode";
+import type { Item } from "$lib/interfaces/Item";
+import { defaultItem } from "$lib/defaults/defaultItem";
 
 // this class makes handling local data a lot easer so you do not have to invoke the rust API a million times
 
@@ -37,6 +38,37 @@ export class StorageManager {
 
   // episode methods
 
+  async removeItemFromEpisode(episodeId: string, itemId: string) {
+    this.seasons.data.forEach((season) => {
+      season.episodes.forEach((episode) => {
+        if (episode.id === episodeId) {
+          episode.items = episode.items.filter((item) => {
+            return item.id !== itemId;
+          });
+        }
+      });
+    });
+    await this.saveAllSeasons(this.seasons);
+    return true;
+  }
+
+  async addItemToEpisode(episodeId: string) {
+    const itemToAdd = defaultItem;
+    itemToAdd.episodeId = episodeId;
+
+    this.seasons.data.forEach((season) => {
+      season.episodes.forEach((episode) => {
+        if (episode.id === episodeId) {
+          itemToAdd.seasonId = season.id;
+          itemToAdd.id = v4();
+          episode.items.push(defaultItem);
+        }
+      });
+    });
+    await this.saveAllSeasons(this.seasons);
+    return true;
+  }
+
   async deleteEpisode(episodeId: string) {
     this.seasons.data.forEach((season) => {
       season.episodes = season.episodes.filter((episode) => {
@@ -47,13 +79,10 @@ export class StorageManager {
   }
 
   async createEpisode(seasonId: string) {
-    console.log("creati episode");
-    console.log(this.seasons.data);
-    console.log(seasonId);
     const season = this.seasons.data.filter((season) => {
       return season.id === seasonId;
     });
-    console.log("season", season);
+
     if (season.length === 0) {
       return false;
     }

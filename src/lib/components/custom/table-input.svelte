@@ -8,6 +8,9 @@
   let ele: unknown;
   let className: string = "";
   export let placeholder: string = "";
+  export let step: number = 1;
+  export let max: number = 59;
+  export let min: number | undefined = undefined;
 
   export { className as class };
 </script>
@@ -19,8 +22,11 @@
     >
   {/if}
   <Input
+    {min}
+    {max}
     {placeholder}
     bind:this={ele}
+    {step}
     on:change
     on:focus={(e) => e?.currentTarget?.select()}
     {type}

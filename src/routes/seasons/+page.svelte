@@ -36,8 +36,7 @@
   <div>
     <h2>Season Management</h2>
     <small class="text-muted-foreground"
-      >Add or edit seasons here. If you want to edit episodes, go back to the
-      dashboard and click on the episode name.</small
+      >Add or edit season settings here.</small
     >
   </div>
 
@@ -88,9 +87,6 @@
   </Table.Root>
 {:else}
   <div class="space-y-4">
-    <p>Looks like you haven't created any seasons yet!</p>
-    <CreateSeasonDialog
-      on:seasonCreated={() => (seasons = storage.seasons.data)}
-    />
+    <h3 class="mt-4">Create a season to get started!</h3>
   </div>
 {/if}

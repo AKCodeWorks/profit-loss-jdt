@@ -1,18 +1,19 @@
 # Profit or Loss Tracker
 
-### Made with Tauri + SvelteKit
+## Made with Tauri + SvelteKit
 
 This application has been built for Windows Machines
 
 This is currently under development. If you choose to install this program in it's current state you will encounter bugs.
 
-You may download a development installer here.
+## You may download the .exe here.
 
-- [JDTInstaller](installers)
+### [JDTInstaller](installers)
 
-Click on the three dots on the right side of the screen then click download
-
-![installer](installscreen.png)
+- Click on the .exe file to go to the file.
+- Click on the three dots on the right side of the screen.
+- ![installer](installscreen.png)
+- Click download.
 
 ## CODE SIGNING
 

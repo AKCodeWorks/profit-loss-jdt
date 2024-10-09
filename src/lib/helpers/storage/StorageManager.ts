@@ -8,7 +8,7 @@ import {
 import { v4 } from "uuid";
 import { defaultEpisode, defaultItem, defaultConfig } from "$lib/defaults";
 
-// this class makes handling local data a lot easer so you do not have to invoke the rust API a million times
+// this class makes handling local data a lot easier so you do not have to invoke the rust API a million times
 
 export class StorageManager {
   config: Config | null = null;
@@ -36,7 +36,6 @@ export class StorageManager {
     }
   }
 
-  // private methods
 
   // episode methods
 
@@ -246,5 +245,5 @@ export class StorageManager {
     }
   }
 }
-
+// export it as a single variable so it doesnt leak memory everywhere
 export const storage = new StorageManager();

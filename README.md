@@ -12,7 +12,7 @@ This is currently under development. If you choose to install this program in it
 
 - Click on the .exe file to go to the file.
 - Click on the three dots on the right side of the screen.
-- ![installer](installscreen.png)
+  ![installer](installscreen.png)
 - Click download.
 
 ## CODE SIGNING

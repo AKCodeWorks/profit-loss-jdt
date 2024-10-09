@@ -8,18 +8,21 @@
 >
   <div class="flex items-center gap-4">
     <img src="./favicon.png" alt="Joey Does Tech Logo" class="size-14" />
-    <h1>Profit or Loss!</h1>
+    <div class="leading-none">
+      <h1 class="leading-none">Profit or Loss</h1>
+      <small>Joey Does Tech</small>
+    </div>
   </div>
   <DropdownMenu.Root>
     <DropdownMenu.Trigger class=""
       ><Icon
-        class="text-primary leading-none size-6 hover:animate-spin-slow"
-        icon="mdi:settings"
+        class="text-primary leading-none size-8 active:scale-95"
+        icon="mdi:menu"
       /></DropdownMenu.Trigger
     >
     <DropdownMenu.Content>
       <DropdownMenu.Group>
-        <DropdownMenu.Label>Configuration</DropdownMenu.Label>
+        <DropdownMenu.Label>Navigation Menu</DropdownMenu.Label>
         <DropdownMenu.Separator />
         <DropdownMenu.Item href="/">Dashboard</DropdownMenu.Item>
         <DropdownMenu.Item href="/config">Global Settings</DropdownMenu.Item>

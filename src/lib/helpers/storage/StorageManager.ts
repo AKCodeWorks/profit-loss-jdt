@@ -9,6 +9,9 @@ import {
 import { defaultConfig } from "$lib/defaults/defaultConfig";
 import exp from "constants";
 import type { Season } from "$lib/interfaces/Season";
+import { v4 } from "uuid";
+import type { Episode } from "$lib/interfaces/Episode";
+import { defaultEpisode } from "$lib/defaults/defaultEpisode";
 
 // this class makes handling local data a lot easer so you do not have to invoke the rust API a million times
 
@@ -32,9 +35,58 @@ export class StorageManager {
 
   // private methods
 
+  // episode methods
+
+  async createEpisode(seasonId: string) {
+    console.log("creati episode");
+    console.log(this.seasons.data);
+    console.log(seasonId);
+    const season = this.seasons.data.filter((season) => {
+      return season.id === seasonId;
+    });
+    console.log("season", season);
+    if (season.length === 0) {
+      return false;
+    }
+
+    const newEpisode = defaultEpisode;
+    newEpisode.seasonId = seasonId;
+    newEpisode.id = v4();
+    season[0].episodes.push(newEpisode);
+    // needto filter out the season that was updated and then add it back in
+    this.seasons.data = this.seasons.data.filter((s) => {
+      return s.id !== seasonId;
+    });
+    // sort the episodes by name
+    season[0].episodes.sort((a, b) => {
+      return b.name.localeCompare(a.name);
+    });
+    this.seasons.data.push(season[0]);
+    this.seasons.data.sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
+
+    await this.saveAllSeasons(this.seasons);
+
+    return true;
+  }
+
   // season methods
+  // TODO: WHEN A SEASON IS DELETED NEED TO UPDATE ALL ITEMS AND EPISODES TO BE DISSOCIATED FROM IT
+  async deleteSeason(seasonId: string) {
+    this.seasons.data = this.seasons.data.filter((season) => {
+      return season.id !== seasonId;
+    });
+    await this.saveAllSeasons(this.seasons);
+  }
+
+  async saveAllSeasons(seasons: { data: Season[] }) {
+    await this.saveFile("seasons.json", JSON.stringify(seasons));
+    this.seasons = seasons;
+  }
 
   async addSeason(season: Season) {
+    season.id = v4();
     this.seasons.data.push(season);
     // sort the seasons by the name
     this.seasons.data.sort((a, b) => {
@@ -49,17 +101,12 @@ export class StorageManager {
         baseDir: BaseDirectory.AppLocalData,
       });
       this.seasons = JSON.parse(seasons);
-      console.log("seasons file exists reading it");
       return JSON.parse(seasons);
     } else {
       this.seasons = { data: [] };
       await this.saveAllSeasons({ data: [] });
       return { data: [] };
     }
-  }
-
-  private async saveAllSeasons(seasons: { data: Season[] }) {
-    await this.saveFile("seasons.json", JSON.stringify(seasons));
   }
 
   //configuration methods

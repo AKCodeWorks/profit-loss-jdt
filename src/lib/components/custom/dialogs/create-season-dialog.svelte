@@ -7,10 +7,11 @@
   import LabeledInput from "../elements/labeled-input.svelte";
   import { Button } from "$lib/components/ui/button";
   import { createEventDispatcher } from "svelte";
+  import type { Config } from "$lib/interfaces/Config";
   const dispatch = createEventDispatcher();
   let open: boolean = false;
-
   let seasonToAdd: Season = defaultSeason;
+  let config: Config | null = storage?.config;
 
   async function createSeason() {
     try {
@@ -27,7 +28,11 @@
 </script>
 
 <Dialog.Root bind:open>
-  <Dialog.Trigger><Button>Create a Season</Button></Dialog.Trigger>
+  <Dialog.Trigger
+    ><Button size="sm" on:click={() => (seasonToAdd = defaultSeason)}
+      >Create a Season</Button
+    ></Dialog.Trigger
+  >
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Add a New Season</Dialog.Title>
@@ -36,6 +41,12 @@
       </Dialog.Description>
       <div class="w-full space-y-4">
         <LabeledInput bind:value={seasonToAdd.name} label="Season Name" />
+        <LabeledInput
+          type="number"
+          step="0.01"
+          bind:value={seasonToAdd.goal}
+          label={`Goal ${config?.currency == "GBP" ? "£" : "$"}`}
+        />
         <Button on:click={async () => await createSeason()}
           >Create Season</Button
         >

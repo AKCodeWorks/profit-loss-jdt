@@ -6,7 +6,7 @@
 
   const dispatch = createEventDispatcher();
   function handleChange(event: any) {
-    if (!event) return;
+    if (!event && !isNullable) return;
     dispatch("selectedChange", event);
     value = event;
   }
@@ -21,6 +21,7 @@
   export let value: any = null;
   export let id: string = "";
   export let error: string[] | undefined = undefined;
+  export let clearText: string = "Please select an option...";
   let className: string = "";
 
   onMount(() => {
@@ -48,12 +49,12 @@
     </Select.Trigger>
     <Select.Content>
       {#if isNullable}
-        <Select.Item value="">{placeholder || ""}</Select.Item>
+        <Select.Item value="">{clearText}</Select.Item>
       {/if}
       {#each options as option}
         <Select.Item class="h-fit min-h-5" value={option[key]}
-          >{option[labelKey]}</Select.Item
-        >
+          >{option[labelKey]}
+        </Select.Item>
       {/each}
     </Select.Content>
   </Select.Root>

@@ -13,6 +13,9 @@
   });
 </script>
 
+<svelte:head>
+  <title>Joey Does Tech</title>
+</svelte:head>
 <Toaster richColors />
 <Navigation />
 

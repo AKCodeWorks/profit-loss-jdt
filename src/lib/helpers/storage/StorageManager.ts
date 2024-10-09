@@ -36,7 +36,6 @@ export class StorageManager {
     }
   }
 
-
   // episode methods
 
   async removeItemFromEpisode(episodeId: string, itemId: string) {
@@ -63,7 +62,6 @@ export class StorageManager {
       let itemToAdd = JSON.parse(JSON.stringify(defaultItem));
 
       let newId = v4();
-      console.log(defaultItem);
 
       itemToAdd.episodeId = episodeId;
       itemToAdd.id = newId;
@@ -150,7 +148,6 @@ export class StorageManager {
   }
 
   async saveAllSeasons(seasons: { data: Season[] }) {
-    console.log("saving all seasons");
     try {
       await this.saveFile("seasons.json", JSON.stringify(seasons));
       this.seasons = seasons;

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LabeledInput from "$lib/components/custom/elements/labeled-input.svelte";
   import LabeledSelect from "$lib/components/custom/elements/labeled-select.svelte";
   import Button from "$lib/components/ui/button/button.svelte";
   import { currencies } from "$lib/consts/currencies";
@@ -57,6 +58,11 @@
       key="id"
       labelKey="name"
       description="Sets the default season to be displayed when the app is opened."
+    />
+    <LabeledInput
+      label="Seller's Fee"
+      description="The amount charged by the vendor you sell from. Enter as a decimal. 9% = 0.09"
+      bind:value={config.sellerRate}
     />
     <div class="flex items-center gap-4">
       <Button href="/" variant="secondary">Go Back</Button>

@@ -151,7 +151,7 @@
         <Table.Head>Item</Table.Head>
         <Table.Head>Cost</Table.Head>
         <Table.Head>Expenses</Table.Head>
-        <Table.Head>Shipping</Table.Head>
+        <Table.Head>Postage</Table.Head>
         <Table.Head>Estimated Sell Price</Table.Head>
         <Table.Head>Actual Sell Price</Table.Head>
         <Table.Head>Time Spent (H:MM)</Table.Head>
@@ -319,7 +319,8 @@
                         item,
                         true,
                         storage.config?.locale,
-                        storage.config?.currency
+                        storage.config?.currency,
+                        storage.config?.sellerRate
                       )}
                     </h3>
 

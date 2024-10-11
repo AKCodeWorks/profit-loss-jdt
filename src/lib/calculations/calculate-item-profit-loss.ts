@@ -32,20 +32,23 @@ export function calcluateItemProfitLoss(
   item: Item,
   asCurrency: boolean = false,
   locale: string = "en-GB",
-  currency: string = "GBP"
+  currency: string = "GBP",
+  sellersFee: number | string = 0
 ): string | number {
   let sellingPrice = safeParseFloat(item.estimatedSellPrice);
   let isEstimated = true;
-
+  let sellFee = safeParseFloat(sellersFee);
   if (item.actualSellPrice) {
     sellingPrice = safeParseFloat(item.actualSellPrice);
     isEstimated = false;
+    sellFee = 0;
   }
 
   let consumables = safeParseFloat(item.cost);
   let expenses = safeParseFloat(item.expenses);
   let shippingCost = safeParseFloat(item.shippingCost);
-  let totalExpense = consumables + shippingCost + expenses;
+  let totalExpense =
+    consumables + shippingCost + expenses + sellingPrice * sellFee;
 
   let result = sellingPrice - totalExpense;
 

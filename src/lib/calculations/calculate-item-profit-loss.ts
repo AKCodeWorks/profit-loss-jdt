@@ -99,6 +99,7 @@ export function calculateSeasonTotalProfitLoss(
 }
 
 export function calculateSeasonGoalPercentage(season: Season) {
+  if (!season.goal) return 0;
   let total = 0;
 
   season.episodes.forEach((episode) => {
@@ -110,4 +111,62 @@ export function calculateSeasonGoalPercentage(season: Season) {
   let percentage = (total / season.goal) * 100;
 
   return percentage.toFixed(1);
+}
+
+export function calculateEpisodeTimeSpent(episode: Episode) {
+  if (!episode?.items?.length) return 0;
+  let total = 0;
+
+  episode.items.forEach((item) => {
+    total += safeParseFloat(item.timeSpent);
+  });
+
+  return total;
+}
+
+// TODO THIS ALWAYS RETURNS UNDEFINED FOR SOME REASON
+export function calculateSeasonTimeSpent(season: Season) {
+  let total = 0;
+
+  season.episodes.forEach((episode) => {
+    total += safeParseFloat(calculateEpisodeTimeSpent(episode));
+  });
+}
+
+export function calculateEpisodeProfitPerHour(
+  episode: Episode,
+  locale: string = "en-GB",
+  currency: string = "GBP"
+) {
+  if (!episode?.items?.length) return 0;
+  let total = 0;
+
+  episode.items.forEach((item) => {
+    total += safeParseFloat(calcluateItemProfitLoss(item));
+  });
+
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(total / calculateEpisodeTimeSpent(episode));
+}
+
+export function calculateSeasonProfitPerHour(
+  season: Season,
+  locale: string = "en-GB",
+  currency: string = "GBP"
+) {
+  if (!season?.episodes?.length) return 0;
+  let total = 0;
+
+  season.episodes.forEach((episode) => {
+    total += safeParseFloat(calculateEpisodeProfitPerHour(episode));
+  });
+
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+  }).format(total / season.episodes.length);
+
+  return total;
 }

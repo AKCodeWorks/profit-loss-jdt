@@ -2,7 +2,11 @@
   import {
     calcluateItemProfitLoss,
     calculateEpisodeProfitLoss,
+    calculateEpisodeProfitPerHour,
+    calculateEpisodeTimeSpent,
     calculateSeasonGoalPercentage,
+    calculateSeasonProfitPerHour,
+    calculateSeasonTimeSpent,
     calculateSeasonTotalProfitLoss,
     safeParseFloat,
   } from "$lib/calculations/calculate-item-profit-loss";
@@ -104,18 +108,43 @@
         storage.config?.locale || "en-GB",
         storage.config?.currency || "GBP"
       )}
-      <div>
-        <h2
-          class={cn(
-            "text-right text-green-500",
-            safeParseFloat(seasonProfitLoss) < 0 && "text-red-500"
-          )}
-        >
-          {seasonProfitLoss}
-        </h2>
-        <small class="font-bold text-muted-foreground"
-          >{season.name} Profit/Loss</small
-        >
+      {@const seasonHoursSpent = calculateSeasonTimeSpent(season)}
+      {@const seasonProfitPerHour = calculateSeasonProfitPerHour(season)}
+
+      <div class="flex gap-4">
+        <!-- 
+        TODO: FIGUrE OUT WHY THIS FUNCTION DOESNT WORK!!
+        <div class="text-right">
+          <h2 class={cn("text-right")}>
+            {seasonHoursSpent}
+          </h2>
+          <small class="font-bold text-muted-foreground">Total Hours</small>
+        </div> -->
+        <div class="text-right">
+          <h2
+            class={cn(
+              " text-green-500",
+              safeParseFloat(seasonProfitLoss) < 0 && "text-red-500"
+            )}
+          >
+            {seasonProfitLoss}
+          </h2>
+          <small class="font-bold text-muted-foreground">Profit</small>
+        </div>
+
+        <div class="text-right">
+          <h2
+            class={cn(
+              "text-right text-green-500",
+              safeParseFloat(seasonProfitLoss) < 0 && "text-red-500"
+            )}
+          >
+            {calculateSeasonProfitPerHour(season) || "N/A"}
+          </h2>
+          <small class="font-bold text-muted-foreground text-right"
+            >Profit/Hour</small
+          >
+        </div>
       </div>
     {/if}
   </div>
@@ -154,7 +183,7 @@
         <Table.Head>Postage</Table.Head>
         <Table.Head>Estimated Sell Price</Table.Head>
         <Table.Head>Actual Sell Price</Table.Head>
-        <Table.Head>Time Spent (H:MM)</Table.Head>
+        <Table.Head>Time Spent</Table.Head>
         <Table.Head class="text-right ">Profit/Loss</Table.Head>
       </Table.Row>
     </Table.Header>
@@ -282,28 +311,16 @@
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    <div class="flex items-center">
-                      <TableInput
-                        noCurrency
-                        class="w-14 text-right pr-1"
-                        on:change={async () => await saveSeasons()}
-                        placeholder="H"
-                        type="number"
-                        bind:value={seasons[seasonIndex].episodes[episodeIndex]
-                          .items[itemIndex].timeSpentHours}
-                      />
-                      :
-                      <TableInput
-                        noCurrency
-                        class="w-16"
-                        on:change={async () => await saveSeasons()}
-                        step={1}
-                        placeholder="MM"
-                        type="number"
-                        bind:value={seasons[seasonIndex].episodes[episodeIndex]
-                          .items[itemIndex].timeSpentMinutes}
-                      />
-                    </div>
+                    <TableInput
+                      noCurrency
+                      step={0.25}
+                      class="max-w-24"
+                      on:change={async () => await saveSeasons()}
+                      placeholder="-"
+                      type="number"
+                      bind:value={seasons[seasonIndex].episodes[episodeIndex]
+                        .items[itemIndex].timeSpent}
+                    />
                   </Table.Cell>
                   <Table.Cell
                     class={cn(
@@ -330,21 +347,10 @@
                   </Table.Cell>
                 </Table.Row>
               {/each}
-              {#if episode.items.length > 1}
-                <!-- this is ugly as all get out but it works for now -->
+              {#if episode.items.length > 0}
                 <Table.Row class="bg-primary/10 hover:bg-primary/10">
-                  <Table.Cell></Table.Cell>
-                  <Table.Cell></Table.Cell>
-                  <Table.Cell></Table.Cell>
-                  <Table.Cell></Table.Cell>
-                  <Table.Cell></Table.Cell>
-                  <Table.Cell></Table.Cell>
                   <Table.Cell
-                    ><p class="text-large text-right font-bold">
-                      {episode.name} Profit/Loss:
-                    </p></Table.Cell
-                  >
-                  <Table.Cell
+                    colspan={8}
                     class={cn(
                       "max-w-24  text-lg text-left font-bold",
                       safeParseFloat(
@@ -355,11 +361,36 @@
                       ) > 0 && "text-green-500"
                     )}
                   >
-                    {calculateEpisodeProfitLoss(
-                      episode,
-                      storage.config?.locale || "en-GB",
-                      storage.config?.currency || "GBP"
-                    )}
+                    <div class="flex items-center gap-4 justify-end">
+                      <p class="text-muted-foreground">Episode Totals</p>
+
+                      <p class="leading-none">
+                        {calculateEpisodeTimeSpent(episode)}
+                        <br />
+                        <small class="text-xs text-muted-foreground"
+                          >hours</small
+                        >
+                      </p>
+
+                      <p class=" leading-none">
+                        {calculateEpisodeProfitLoss(
+                          episode,
+                          storage.config?.locale || "en-GB",
+                          storage.config?.currency || "GBP"
+                        )}
+                        <br />
+                        <small class="text-xs text-muted-foreground">
+                          Profit/Loss
+                        </small>
+                      </p>
+                      <p class="leading-none">
+                        {calculateEpisodeProfitPerHour(episode)}
+                        <br />
+                        <small class="text-muted-foreground text-xs">
+                          Profit/Hour
+                        </small>
+                      </p>
+                    </div>
                   </Table.Cell>
                 </Table.Row>
               {/if}

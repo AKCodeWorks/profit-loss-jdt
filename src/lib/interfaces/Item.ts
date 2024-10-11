@@ -7,7 +7,6 @@ export interface Item {
   cost?: number;
   estimatedSellPrice?: number;
   actualSellPrice?: number;
-  timeSpentHours?: number;
-  timeSpentMinutes?: number;
+  timeSpent?: number;
   expenses?: number;
 }

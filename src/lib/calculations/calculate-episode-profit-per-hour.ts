@@ -17,8 +17,12 @@ export function calculateEpisodeProfitPerHour(
     total += safeParseFloat(calcluateItemProfitLoss(item));
   });
 
+  let result = total / calculateEpisodeTimeSpent(episode);
+
+  if (isNaN(result)) result = 0;
+
   return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: currency,
-  }).format(total / calculateEpisodeTimeSpent(episode));
+  }).format(result);
 }

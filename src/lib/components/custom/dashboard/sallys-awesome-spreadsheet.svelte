@@ -47,7 +47,7 @@
 </script>
 
 <Table.Root class="px-4">
-  <Table.Caption>Sally's Completely Over-Engineered Spreadsheet</Table.Caption>
+  <Table.Caption>Sally's Over-Engineered Spreadsheet</Table.Caption>
   <Table.Header>
     <Table.Row>
       <Table.Head>Item</Table.Head>

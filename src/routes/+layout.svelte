@@ -15,7 +15,7 @@
 <svelte:head>
   <title>Joey Does Tech</title>
 </svelte:head>
-<Toaster richColors />
+<Toaster position="top-left" richColors />
 <Navigation />
 
 <slot />

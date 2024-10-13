@@ -9,7 +9,7 @@
     calculateSeasonTimeSpent,
     calculateSeasonTotalProfitLoss,
     safeParseFloat,
-  } from "$lib/calculations/calculate-item-profit-loss";
+  } from "$lib/calculations";
 
   //TODO: Clean up this file with some components
   import DeleteEpisodeDialog from "$lib/components/custom/dialogs/episodes/delete-episode-dialog.svelte";
@@ -112,14 +112,12 @@
       {@const seasonProfitPerHour = calculateSeasonProfitPerHour(season)}
 
       <div class="flex gap-4">
-        <!-- 
-        TODO: FIGUrE OUT WHY THIS FUNCTION DOESNT WORK!!
         <div class="text-right">
           <h2 class={cn("text-right")}>
             {seasonHoursSpent}
           </h2>
           <small class="font-bold text-muted-foreground">Total Hours</small>
-        </div> -->
+        </div>
         <div class="text-right">
           <h2
             class={cn(
@@ -174,7 +172,8 @@
   </div>
 {:else}
   <Table.Root class="px-4">
-    <Table.Caption>Joey's Completely Over-Engineered Spreadsheet</Table.Caption>
+    <Table.Caption>Sally's Completely Over-Engineered Spreadsheet</Table.Caption
+    >
     <Table.Header>
       <Table.Row>
         <Table.Head>Item</Table.Head>
@@ -361,10 +360,10 @@
                       ) > 0 && "text-green-500"
                     )}
                   >
-                    <div class="flex items-center gap-4 justify-end">
-                      <p class="text-muted-foreground">Episode Totals</p>
+                    <div class="flex items-center gap-4 justify-end text-right">
+                      <p class="text-muted-foreground text-sm">Episode Total</p>
 
-                      <p class="leading-none">
+                      <p class="leading-none text-secondary-foreground">
                         {calculateEpisodeTimeSpent(episode)}
                         <br />
                         <small class="text-xs text-muted-foreground"
